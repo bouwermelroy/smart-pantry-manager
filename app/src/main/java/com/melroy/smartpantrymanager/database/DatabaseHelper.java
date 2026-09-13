@@ -4,6 +4,12 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.Cursor;
+import com.melroy.smartpantrymanager.model.PantryItem;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.melroy.smartpantrymanager.model.PantryItem;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -191,5 +197,54 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             ingredientValues.put(COLUMN_RI_UNIT, units[i]);
             db.insert(TABLE_RECIPE_INGREDIENTS, null, ingredientValues);
         }
+    }
+
+    // Insert a new pantry item and return its generated id.
+    public long insertPantryItem(PantryItem item) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_PANTRY_NAME, item.getName());
+        values.put(COLUMN_PANTRY_QUANTITY, item.getQuantity());
+        values.put(COLUMN_PANTRY_UNIT, item.getUnit());
+        values.put(COLUMN_PANTRY_EXPIRY_DATE, item.getExpiryDate());
+        return db.insert(TABLE_PANTRY_ITEMS, null, values);
+    }
+
+    // Return every pantry item currently stored, ordered by name.
+    public List<PantryItem> getAllPantryItems() {
+            List<PantryItem> items = new ArrayList<>();
+            SQLiteDatabase db = getReadableDatabase();
+            Cursor cursor = db.query(TABLE_PANTRY_ITEMS, null, null, null,
+                    null, null, COLUMN_PANTRY_NAME + " ASC");
+
+            while (cursor.moveToNext()) {
+                long id = cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_PANTRY_ID));
+                String name = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PANTRY_NAME));
+                double quantity = cursor.getDouble(cursor.getColumnIndexOrThrow(COLUMN_PANTRY_QUANTITY));
+                String unit = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PANTRY_UNIT));
+                String expiryDate = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PANTRY_EXPIRY_DATE));
+                items.add(new PantryItem(id, name, quantity, unit, expiryDate));
+            }
+            cursor.close();
+            return items;
+    }
+
+    // Update an existing pantry item, matched by its id.
+    public int updatePantryItem(PantryItem item) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_PANTRY_NAME, item.getName());
+        values.put(COLUMN_PANTRY_QUANTITY, item.getQuantity());
+        values.put(COLUMN_PANTRY_UNIT, item.getUnit());
+        values.put(COLUMN_PANTRY_EXPIRY_DATE, item.getExpiryDate());
+        return db.update(TABLE_PANTRY_ITEMS, values, COLUMN_PANTRY_ID + " = ?",
+                new String[]{String.valueOf(item.getId())});
+    }
+
+    // Delete a pantry item by its id.
+    public void deletePantryItem(long id) {
+        SQLiteDatabase db = getWritableDatabase();
+        db.delete(TABLE_PANTRY_ITEMS, COLUMN_PANTRY_ID + " = ?",
+                new String[]{String.valueOf(id)});
     }
 }
