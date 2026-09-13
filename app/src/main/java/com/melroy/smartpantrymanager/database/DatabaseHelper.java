@@ -1,5 +1,6 @@
 package com.melroy.smartpantrymanager.database;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -63,6 +64,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + "FOREIGN KEY(" + COLUMN_RI_RECIPE_ID + ") REFERENCES "
                 + TABLE_RECIPES + "(" + COLUMN_RECIPE_ID + "))";
         db.execSQL(createRecipeIngredientsTable);
+        seedRecipes(db);
     }
 
     @Override
@@ -72,5 +74,122 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_RECIPES);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PANTRY_ITEMS);
         onCreate(db);
+    }
+
+    // Insert a starter set of South African recipes and their ingredients into the database.
+    private void seedRecipes(SQLiteDatabase db) {
+        insertRecipe(db, "Pap and Chakalaka",
+                "Boil the mielie meal into a stiff pap and serve with a spiced chakalaka relish.",
+                new String[]{"mielie mean", "tomato", "onion", "carrot"},
+                new double[]{250, 3, 1, 2},
+                new String[]{"g", "count", "count", "count"});
+
+        insertRecipe(db, "Boerewors Rolls",
+                "Grill the boerewors and serve in a bread roll with fried onions.",
+                new String[]{"boerewors", "bread roll", "onion", "tomato sauce"},
+                new double[]{300, 2, 1, 2},
+                new String[]{"g", "count", "count", "tbsp"});
+
+        insertRecipe(db, "Bobotie",
+                "Fry the mince with onion and spices, top with an egg custard, and bake.",
+                new String[]{"beef mince", "onion", "eggs", "milk", "bread"},
+                new double[]{500, 1, 2, 200, 1},
+                new String[]{"g", "count", "count", "ml", "slice"});
+
+        insertRecipe(db, "Vetkoek with Mince",
+                "Fry the dough balls until golden and fill with a savoury mince mixture.",
+                new String[]{"flour", "beef minced", "onion", "eggs"},
+                new double[]{300, 250, 1, 1},
+                new String[]{"g", "g", "count", "count"});
+
+        insertRecipe(db, "Chicken Potjie",
+                "Slow-cook the chicken with potato, carrot, and onion in one pot.",
+                new String[]{"chicken", "potato", "carrot", "onion"},
+                new double[]{500, 4, 2, 1},
+                new String[]{"g", "count", "count", "count"});
+
+        insertRecipe(db, "Braai Broodjies",
+                "Butter the bread, fill with cheese and tomato, and grill over the coals.",
+                new String[]{"bread", "cheese", "tomato", "butter"},
+                new double[]{4, 100, 2, 2},
+                new String[]{"slice", "g", "count", "tbsp"});
+
+        insertRecipe(db, "Boerewors and Pap",
+                "Grill the boerewors and serve alongside a stiff mielie pap and tomato relish.",
+                new String[]{"boerewors", "mielie meal", "tomato", "onion"},
+                new double[]{300, 250, 2, 1},
+                new String[]{"g", "g", "count", "count"});
+
+        insertRecipe(db, "Beef Stew",
+                "Brown the beef, then simmer with potato, carrot, and onion until tender.",
+                new String[]{"beef", "potato", "carrot", "onion"},
+                new double[]{500, 3, 2, 1},
+                new String[]{"g", "count", "count", "count"});
+
+        insertRecipe(db, "Chakalaka Beans on Toast",
+                "Heat the beans with chakalaka spices and serve over toasted bread.",
+                new String[]{"baked beans", "tomato", "onion", "bread"},
+                new double[]{400, 2, 1, 2},
+                new String[]{"g", "count", "count", "slice"});
+
+        insertRecipe(db, "Milk Tart",
+                "Bake a pastry base, fill with a milk and egg custard, and dust with cinnamon.",
+                new String[]{"flour", "milk", "eggs", "sugar"},
+                new double[]{200, 500, 3, 100},
+                new String[]{"g", "ml", "count", "g"});
+
+        insertRecipe(db, "Chicken and Rice",
+                "Fry the chicken with onion, then simmer with rice until cooked through.",
+                new String[]{"chicken", "rice", "onion", "carrot"},
+                new double[]{400, 250, 1, 1},
+                new String[]{"g", "g", "count", "count"});
+
+        insertRecipe(db, "Egg and Tomato Sandwich",
+                "Boil the eggs, slice with tomato, and layer between buttered bread.",
+                new String[]{"eggs", "tomato", "bread", "butter"},
+                new double[]{2, 1, 2, 1},
+                new String[]{"count", "count", "slice", "tbsp"});
+
+        insertRecipe(db, "Samp and beans",
+                "Boil the samp and beans until soft, and season to taste.",
+                new String[]{"samp", "sugar beans", "onion"},
+                new double[]{300, 2, 1},
+                new String[]{"g", "g", "count"});
+
+        insertRecipe(db, "Tomato Bredie",
+                "Simmer lamb with tomato, onion, and potato until the meat is tender.",
+                new String[]{"lamb", "tomato", "onion", "potato"},
+                new double[]{500, 4, 1, 3},
+                new String[]{"g", "count", "count", "count"});
+
+        insertRecipe(db, "Cheese and Tomato Vetkoek",
+                "Fry the dough balls until golden and fill with cheese and sliced tomato.",
+                new String[]{"flour", "cheese", "tomato"},
+                new double[]{300, 100, 2},
+                new String[]{"g", "g", "count"});
+
+        insertRecipe(db, "Butternut and Onion Soup",
+                "Simmer the butternut and onion in stock, then blend until smooth.",
+                new String[]{"butternut", "onion", "vegetable stock"},
+                new double[]{1, 1, 500},
+                new String[]{"count", "count", "ml"});
+    }
+
+    // Helper method that inserts one recipe and all of its ingredients.
+    private void insertRecipe(SQLiteDatabase db, String name, String instructions, String[] ingredientNames,
+                              double[] quantities, String[] units) {
+        ContentValues recipeValues = new ContentValues();
+        recipeValues.put(COLUMN_RECIPE_NAME, name);
+        recipeValues.put(COLUMN_RECIPE_INSTRUCTIONS, instructions);
+        long recipeId = db.insert(TABLE_RECIPES, null, recipeValues);
+
+        for (int i = 0; i < ingredientNames.length; i++) {
+            ContentValues ingredientValues = new ContentValues();
+            ingredientValues.put(COLUMN_RI_RECIPE_ID, recipeId);
+            ingredientValues.put(COLUMN_RI_INGREDIENT_NAME, ingredientNames[i]);
+            ingredientValues.put(COLUMN_RI_QUANTITY_REQUIRED, quantities[i]);
+            ingredientValues.put(COLUMN_RI_UNIT, units[i]);
+            db.insert(TABLE_RECIPE_INGREDIENTS, null, ingredientValues);
+        }
     }
 }
