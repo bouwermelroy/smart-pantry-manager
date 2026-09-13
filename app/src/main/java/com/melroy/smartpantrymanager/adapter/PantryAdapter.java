@@ -4,21 +4,37 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.melroy.smartpantrymanager.R;
 import com.melroy.smartpantrymanager.model.PantryItem;
-
 import java.util.List;
 
 public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryViewHolder> {
 
+    // Allows the Activity to react when a pantry item row is tapped.
+    public interface OnItemClickListener {
+        void onItemClick(PantryItem item);
+    }
+
+    // Allows the Activity to react when a pantry item row is long pressed.
+    public interface OnItemLongClickListener {
+        void onItemLongClick(PantryItem item);
+    }
     private final List<PantryItem> pantryItems;
+    private OnItemClickListener onItemClickListener;
+    private OnItemLongClickListener onItemLongClickListener;
 
     public PantryAdapter(List<PantryItem> pantryItems) {
         this.pantryItems = pantryItems;
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.onItemClickListener = listener;
+    }
+
+    public void setOnItemLongClickListener(OnItemLongClickListener listener) {
+        this.onItemLongClickListener = listener;
     }
 
     @NonNull
@@ -40,6 +56,19 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryView
             details += ", expires " + item.getExpiryDate();
         }
         holder.textDetails.setText(details);
+
+        holder.itemView.setOnClickListener(v -> {
+            if (onItemClickListener != null) {
+                onItemClickListener.onItemClick(item);
+            }
+        });
+
+        holder.itemView.setOnLongClickListener(v -> {
+            if (onItemLongClickListener != null) {
+                onItemLongClickListener.onItemLongClick(item);
+            }
+            return true;
+        });
     }
 
     @Override
