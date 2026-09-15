@@ -36,6 +36,13 @@ public class PantryListActivity extends AppCompatActivity {
             Intent intent = new Intent(PantryListActivity.this, AddEditIngredientActivity.class);
             startActivity(intent);
         });
+
+        Button buttonViewSuggestedRecipes = findViewById(R.id.buttonViewSuggestedRecipes);
+        buttonViewSuggestedRecipes.setOnClickListener(v -> {
+            Intent intent = new Intent(PantryListActivity.this, SuggestedRecipesActivity.class);
+            startActivity(intent);
+        });
+
     }
 
     @Override
