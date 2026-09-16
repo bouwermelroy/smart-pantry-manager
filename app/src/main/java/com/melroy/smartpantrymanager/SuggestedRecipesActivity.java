@@ -2,6 +2,7 @@ package com.melroy.smartpantrymanager;
 
 import android.os.Bundle;
 import android.widget.TextView;
+import android.content.Intent;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -64,6 +65,14 @@ public class SuggestedRecipesActivity extends AppCompatActivity {
 
             RecipeAdapter recipeAdapter = new RecipeAdapter(suggestedRecipes);
             recyclerSuggestedRecipes.setAdapter(recipeAdapter);
+
+            recipeAdapter.setOnRecipeClickListener(recipe -> {
+                Intent intent = new Intent(SuggestedRecipesActivity.this, RecipeDetailActivity.class);
+                intent.putExtra(RecipeDetailActivity.EXTRA_RECIPE_ID, recipe.getId());
+                intent.putExtra(RecipeDetailActivity.EXTRA_RECIPE_NAME, recipe.getName());
+                intent.putExtra(RecipeDetailActivity.EXTRA_RECIPE_INSTRUCTIONS, recipe.getInstructions());
+                startActivity(intent);
+            });
         }
     }
 }
