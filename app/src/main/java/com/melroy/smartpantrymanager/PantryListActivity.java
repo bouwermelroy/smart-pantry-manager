@@ -43,6 +43,12 @@ public class PantryListActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        Button buttonOpenSettings = findViewById(R.id.buttonOpenSettings);
+        buttonOpenSettings.setOnClickListener(v -> {
+            Intent intent = new Intent(PantryListActivity.this, SettingsActivity.class);
+            startActivity(intent);
+        });
+
     }
 
     @Override
