@@ -4,16 +4,16 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
-import android.content.Intent;
-import android.os.Bundle;
-import android.widget.Button;
-import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.melroy.smartpantrymanager.adapter.PantryAdapter;
 import com.melroy.smartpantrymanager.database.DatabaseHelper;
 import com.melroy.smartpantrymanager.model.PantryItem;
+
 import java.util.List;
 
 public class PantryListActivity extends AppCompatActivity {
@@ -37,26 +37,35 @@ public class PantryListActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        Button buttonViewSuggestedRecipes = findViewById(R.id.buttonViewSuggestedRecipes);
-        buttonViewSuggestedRecipes.setOnClickListener(v -> {
-            Intent intent = new Intent(PantryListActivity.this, SuggestedRecipesActivity.class);
-            startActivity(intent);
-        });
+        setupBottomNavigation();
+    }
 
-        Button buttonOpenSettings = findViewById(R.id.buttonOpenSettings);
-        buttonOpenSettings.setOnClickListener(v -> {
-            Intent intent = new Intent(PantryListActivity.this, SettingsActivity.class);
-            startActivity(intent);
-        });
+    // Configure the bottom navigation bar to switch between the three main screens.
+    private void setupBottomNavigation() {
+        BottomNavigationView bottomNavigation = findViewById(R.id.bottomNavigation);
+        bottomNavigation.setSelectedItemId(R.id.nav_pantry);
 
+        bottomNavigation.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+
+            if (itemId == R.id.nav_pantry) {
+                return true;
+            } else if (itemId == R.id.nav_recipes) {
+                startActivity(new Intent(PantryListActivity.this, SuggestedRecipesActivity.class));
+                overridePendingTransition(0, 0);
+                return true;
+            } else if (itemId == R.id.nav_settings) {
+                startActivity(new Intent(PantryListActivity.this, SettingsActivity.class));
+                overridePendingTransition(0, 0);
+                return true;
+            }
+            return false;
+        });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        /* Refresh the list every time this screen becomes visible again, so newly added or edited
-        items show up immediately.
-         */
         loadPantryItems();
     }
 

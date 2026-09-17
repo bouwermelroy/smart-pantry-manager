@@ -1,17 +1,21 @@
 package com.melroy.smartpantrymanager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
-import android.content.Intent;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.melroy.smartpantrymanager.adapter.RecipeAdapter;
 import com.melroy.smartpantrymanager.database.DatabaseHelper;
 import com.melroy.smartpantrymanager.model.PantryItem;
 import com.melroy.smartpantrymanager.model.Recipe;
 import com.melroy.smartpantrymanager.model.RecipeIngredient;
 import com.melroy.smartpantrymanager.util.MatchingEngine;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +34,31 @@ public class SuggestedRecipesActivity extends AppCompatActivity {
         recyclerSuggestedRecipes = findViewById(R.id.recyclerSuggestedRecipes);
         recyclerSuggestedRecipes.setLayoutManager(new LinearLayoutManager(this));
         textEmptyState = findViewById(R.id.textEmptyState);
+
+        setupBottomNavigation();
+    }
+
+    // Configure the bottom navigation bar to switch between the three main screens.
+    private void setupBottomNavigation() {
+        BottomNavigationView bottomNavigation = findViewById(R.id.bottomNavigation);
+        bottomNavigation.setSelectedItemId(R.id.nav_recipes);
+
+        bottomNavigation.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+
+            if (itemId == R.id.nav_pantry) {
+                startActivity(new Intent(SuggestedRecipesActivity.this, PantryListActivity.class));
+                overridePendingTransition(0, 0);
+                return true;
+            } else if (itemId == R.id.nav_recipes) {
+                return true;
+            } else if (itemId == R.id.nav_settings) {
+                startActivity(new Intent(SuggestedRecipesActivity.this, SettingsActivity.class));
+                overridePendingTransition(0, 0);
+                return true;
+            }
+            return false;
+        });
     }
 
     @Override

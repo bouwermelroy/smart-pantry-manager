@@ -1,9 +1,13 @@
 package com.melroy.smartpantrymanager;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Switch;
+
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -30,6 +34,31 @@ public class SettingsActivity extends AppCompatActivity {
             sharedPreferences.edit()
                     .putBoolean(KEY_EXPIRY_ALERTS_ENABLED, isChecked)
                     .apply();
+        });
+
+        setupBottomNavigation();
+    }
+
+    // Configure the bottom navigation bar to switch between the three main screens.
+    private void setupBottomNavigation() {
+        BottomNavigationView bottomNavigation = findViewById(R.id.bottomNavigation);
+        bottomNavigation.setSelectedItemId(R.id.nav_settings);
+
+        bottomNavigation.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+
+            if (itemId == R.id.nav_pantry) {
+                startActivity(new Intent(SettingsActivity.this, PantryListActivity.class));
+                overridePendingTransition(0, 0);
+                return true;
+            } else if (itemId == R.id.nav_recipes) {
+                startActivity(new Intent(SettingsActivity.this, SuggestedRecipesActivity.class));
+                overridePendingTransition(0, 0);
+                return true;
+            } else if (itemId == R.id.nav_settings) {
+                return true;
+            }
+            return false;
         });
     }
 }
