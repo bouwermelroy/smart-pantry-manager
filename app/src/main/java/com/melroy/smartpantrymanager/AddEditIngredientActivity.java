@@ -69,6 +69,17 @@ public class AddEditIngredientActivity extends AppCompatActivity {
             return;
         }
 
+        if (unit.isEmpty()) {
+            Toast.makeText(this, "Please enter a unit.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Check that the expiry date, if provided, follows the yyyy-MM-dd format.
+        if (!expiryDate.isEmpty() && !expiryDate.matches("\\d{4}-\\d{2}-\\d{2}")) {
+            Toast.makeText(this, "Please enter the expiry date as yyyy-MM-dd.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         double quantity;
         try {
             quantity = Double.parseDouble(quantityText);
