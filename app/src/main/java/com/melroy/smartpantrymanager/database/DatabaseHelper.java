@@ -2,16 +2,16 @@ package com.melroy.smartpantrymanager.database;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.database.Cursor;
+
 import com.melroy.smartpantrymanager.model.PantryItem;
 import com.melroy.smartpantrymanager.model.Recipe;
 import com.melroy.smartpantrymanager.model.RecipeIngredient;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import com.melroy.smartpantrymanager.model.PantryItem;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -88,7 +88,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private void seedRecipes(SQLiteDatabase db) {
         insertRecipe(db, "Pap and Chakalaka",
                 "Boil the mielie meal into a stiff pap and serve with a spiced chakalaka relish.",
-                new String[]{"mielie mean", "tomato", "onion", "carrot"},
+                new String[]{"mielie meal", "tomato", "onion", "carrot"},
                 new double[]{250, 3, 1, 2},
                 new String[]{"g", "count", "count", "count"});
 
@@ -106,7 +106,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         insertRecipe(db, "Vetkoek with Mince",
                 "Fry the dough balls until golden and fill with a savoury mince mixture.",
-                new String[]{"flour", "beef minced", "onion", "eggs"},
+                new String[]{"flour", "beef mince", "onion", "eggs"},
                 new double[]{300, 250, 1, 1},
                 new String[]{"g", "g", "count", "count"});
 
@@ -158,10 +158,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 new double[]{2, 1, 2, 1},
                 new String[]{"count", "count", "slice", "tbsp"});
 
-        insertRecipe(db, "Samp and beans",
+        insertRecipe(db, "Samp and Beans",
                 "Boil the samp and beans until soft, and season to taste.",
                 new String[]{"samp", "sugar beans", "onion"},
-                new double[]{300, 2, 1},
+                new double[]{300, 200, 1},
                 new String[]{"g", "g", "count"});
 
         insertRecipe(db, "Tomato Bredie",
@@ -214,21 +214,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Return every pantry item currently stored, ordered by name.
     public List<PantryItem> getAllPantryItems() {
-            List<PantryItem> items = new ArrayList<>();
-            SQLiteDatabase db = getReadableDatabase();
-            Cursor cursor = db.query(TABLE_PANTRY_ITEMS, null, null, null,
-                    null, null, COLUMN_PANTRY_NAME + " ASC");
+        List<PantryItem> items = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query(TABLE_PANTRY_ITEMS, null, null, null,
+                null, null, COLUMN_PANTRY_NAME + " ASC");
 
-            while (cursor.moveToNext()) {
-                long id = cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_PANTRY_ID));
-                String name = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PANTRY_NAME));
-                double quantity = cursor.getDouble(cursor.getColumnIndexOrThrow(COLUMN_PANTRY_QUANTITY));
-                String unit = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PANTRY_UNIT));
-                String expiryDate = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PANTRY_EXPIRY_DATE));
-                items.add(new PantryItem(id, name, quantity, unit, expiryDate));
-            }
-            cursor.close();
-            return items;
+        while (cursor.moveToNext()) {
+            long id = cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_PANTRY_ID));
+            String name = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PANTRY_NAME));
+            double quantity = cursor.getDouble(cursor.getColumnIndexOrThrow(COLUMN_PANTRY_QUANTITY));
+            String unit = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PANTRY_UNIT));
+            String expiryDate = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PANTRY_EXPIRY_DATE));
+            items.add(new PantryItem(id, name, quantity, unit, expiryDate));
+        }
+        cursor.close();
+        return items;
     }
 
     // Update an existing pantry item, matched by its id.

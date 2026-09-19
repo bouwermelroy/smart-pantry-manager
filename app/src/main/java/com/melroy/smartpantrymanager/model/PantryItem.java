@@ -9,7 +9,6 @@ public class PantryItem {
     private String expiryDate;
 
     // Create a pantry item using an existing database id.
-
     public PantryItem(long id, String name, double quantity, String unit, String expiryDate) {
         this.id = id;
         this.name = name;
@@ -18,7 +17,7 @@ public class PantryItem {
         this.expiryDate = expiryDate;
     }
 
-    // Create a new pantry item before it has been saved to the database
+    // Create a new pantry item before it has been saved to the database.
     public PantryItem(String name, double quantity, String unit, String expiryDate) {
         this.name = name;
         this.quantity = quantity;

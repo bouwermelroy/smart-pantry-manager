@@ -4,11 +4,14 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.melroy.smartpantrymanager.database.DatabaseHelper;
 import com.melroy.smartpantrymanager.model.PantryItem;
 
 public class AddEditIngredientActivity extends AppCompatActivity {
+
     public static final String EXTRA_PANTRY_ITEM_ID = "extra_pantry_item_id";
     public static final String EXTRA_PANTRY_ITEM_NAME = "extra_pantry_item_name";
     public static final String EXTRA_PANTRY_ITEM_QUANTITY = "extra_pantry_item_quantity";
@@ -42,11 +45,11 @@ public class AddEditIngredientActivity extends AppCompatActivity {
             editQuantity.setText(String.valueOf(getIntent().getDoubleExtra(EXTRA_PANTRY_ITEM_QUANTITY, 0)));
             editUnit.setText(getIntent().getStringExtra(EXTRA_PANTRY_ITEM_UNIT));
             editExpiryDate.setText(getIntent().getStringExtra(EXTRA_PANTRY_ITEM_EXPIRY));
-    }
+        }
 
         Button buttonSaveIngredient = findViewById(R.id.buttonSaveIngredient);
         buttonSaveIngredient.setOnClickListener(v -> saveIngredient());
-}
+    }
 
     // Validate the form input and save the ingredient to the database.
     private void saveIngredient() {
@@ -55,7 +58,7 @@ public class AddEditIngredientActivity extends AppCompatActivity {
         String unit = editUnit.getText().toString().trim();
         String expiryDate = editExpiryDate.getText().toString().trim();
 
-        // CHeck that the required fields have been completed.
+        // Check that the required fields have been completed.
         if (name.isEmpty()) {
             Toast.makeText(this, "Please enter an ingredient name.", Toast.LENGTH_SHORT).show();
             return;
@@ -64,11 +67,6 @@ public class AddEditIngredientActivity extends AppCompatActivity {
             Toast.makeText(this, "Please enter a quantity.", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (unit.isEmpty()) {
-            Toast.makeText(this, "Please enter a unit.", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
         if (unit.isEmpty()) {
             Toast.makeText(this, "Please enter a unit.", Toast.LENGTH_SHORT).show();
             return;
@@ -92,7 +90,7 @@ public class AddEditIngredientActivity extends AppCompatActivity {
             return;
         }
 
-        // Store an empty exiry date as null rather than an empty string.
+        // Store an empty expiry date as null rather than an empty string.
         String finalExpiryDate = expiryDate.isEmpty() ? null : expiryDate;
 
         if (existingItemId != -1) {

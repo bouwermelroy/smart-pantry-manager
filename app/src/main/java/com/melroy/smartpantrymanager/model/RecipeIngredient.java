@@ -4,7 +4,6 @@ public class RecipeIngredient {
 
     private long id;
     private long recipeId;
-
     private String ingredientName;
     private double quantityRequired;
     private String unit;
@@ -19,7 +18,6 @@ public class RecipeIngredient {
     }
 
     // Create a new recipe ingredient before it has been saved to the database.
-
     public RecipeIngredient(long recipeId, String ingredientName, double quantityRequired, String unit) {
         this.recipeId = recipeId;
         this.ingredientName = ingredientName;
