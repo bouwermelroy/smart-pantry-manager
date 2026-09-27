@@ -12,7 +12,7 @@ A collection of approximately 15-20 recipes is included within the application. 
 
 One of the main features of the application is the strict ingredient-matching system. When looking at the ingredients stored in the user's pantry, the application checks whether every ingredient required by a recipe is available and whether there is a sufficient quantity available. A recipe will only be shown as available if all of its requirements can be met.
 
-The application also includes settings that allow users to adjust certain preferences, such as notifications for ingredients that are close to their expiry date and preferred measurement units.
+The application also includes a settings screen that allows the user to toggle a preference for being notified about ingredients that are expiring soon.
 
 ## Database
 
